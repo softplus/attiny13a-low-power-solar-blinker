@@ -85,10 +85,3 @@ int main(void) {
 		}
 	}
 }
-
-/*
-** todo
-** - try 8s sleep
-** - measure and document power usage
-** - consider adc sleep like http://www.gammon.com.au/forum/?id=12769
-*/

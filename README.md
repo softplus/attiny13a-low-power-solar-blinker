@@ -67,7 +67,11 @@ LED_D lights when below threshold.
 
 # To-do's
 
-...
+Things to try:
+
+* try 8s sleep
+* measure and document power usage
+* consider ADC sleep like http://www.gammon.com.au/forum/?id=12769
 
 # FYI
 
