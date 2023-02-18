@@ -1,4 +1,4 @@
-# attiny13a vin
+# Low power ATtiny13A-based solar blinker
 
 [MIT license](LICENSE) / (c) 2023 [John Mueller](https://johnmu.com/)
 
@@ -61,9 +61,7 @@ Mapping measurements to ADC values: 8bit measurement for simplification
 
 # Usage
 
-Determines threshold to use for recognizing low-voltage from solar power.
-
-LED_D lights when below threshold.
+Compile & upload with platform.io
 
 # To-do's
 
