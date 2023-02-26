@@ -4,7 +4,9 @@
 
 # Hardware
 
-ATTINY13a chip [Datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny13A-Data-Sheet-DS40002307A.pdf)
+MCU: ATtiny13A chip [Datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny13A-Data-Sheet-DS40002307A.pdf)
+
+[PCB, schematic](tree/main/hardware)
 
 Running at 128kHz, no brown-out detection.
 
