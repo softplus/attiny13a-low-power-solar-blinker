@@ -6,6 +6,8 @@
 
 ATTINY13a chip [Datasheet](https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny13A-Data-Sheet-DS40002307A.pdf)
 
+Running at 128kHz, no brown-out detection.
+
 Pins:
 
 * PB0 - LED_D
@@ -61,13 +63,23 @@ Mapping measurements to ADC values: 8bit measurement for simplification
 
 # Usage
 
-Compile & upload with platform.io
+Compile & upload with platform.io via ICSP
 
-# To-do's
+# Anecdotes
+
+TIL
+
+* Works, but is annoying to build & clunky to keep.
+* NiMh batteries are great, but totally over-dimensioned
+
+For future revisions:
+
+* Use larger parts (0804 or 1206) for ease of construction. No need for tinyness.
+* Use high-visibility / ultra-bright LEDs (High lumen / watt)
+* Form-factor for an enclosure, or for something nicer-looking
 
 Things to try:
 
-* try 8s sleep
 * measure and document power usage
 * consider ADC sleep like http://www.gammon.com.au/forum/?id=12769
 
