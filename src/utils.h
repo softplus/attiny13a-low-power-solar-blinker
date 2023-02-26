@@ -39,10 +39,14 @@
 #define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
 #endif
 
+/* Software PWM */
 void pin_write_pwm(uint8_t pin, uint8_t value, uint16_t duration_ms);
+
+/* Delays */
 void delay_us(uint16_t us_count);
 void delay_ms(uint16_t ms_count);
 
+/* ADC functions */
 void     adc_enable(uint8_t pin);
 void     adc_disable();
 uint8_t  adc_read();

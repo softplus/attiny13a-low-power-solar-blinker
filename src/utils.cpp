@@ -26,6 +26,7 @@
 #include <util/delay.h>
 #include "utils.h"
 
+/* Software-PWM on the pin for a given duration, returns when complete */
 void pin_write_pwm(uint8_t pin, uint8_t value, uint16_t duration_ms) {
     // value = 0-255
 	// duration = ms
@@ -48,6 +49,7 @@ void pin_write_pwm(uint8_t pin, uint8_t value, uint16_t duration_ms) {
     }
 }
 
+/* Delay for a given number of microseconds (us) */
 void delay_us(uint16_t us_count) {
 #if F_CPU>1000000L
 #define DELAY_US_ACCURACY 10
@@ -59,12 +61,13 @@ void delay_us(uint16_t us_count) {
     // 10us accuracy for 1Mhz+, 50us for <1MHz
 }
 
+/* Delay for a given number of milliseconds (ms) */
 void delay_ms(uint16_t ms_count) {
     for (uint16_t i=0; i<ms_count; i++) _delay_ms(1);
 }
 
 // ADC: https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny13A-Data-Sheet-DS40002307A.pdf#page=89 
-// enable ADC for the given pin
+/* enable ADC for the given pin */
 void adc_enable(uint8_t pin) {
     // only possible for pins 2-5 (PB2-PB5)
     if (pin<2) return;
@@ -104,13 +107,13 @@ void adc_enable(uint8_t pin) {
     sbi(ADCSRA, ADEN);  // enable ADC
 }
 
-// disable ADC for all pins
+/* disable ADC for all pins; saves power */
 void adc_disable() {
     // disable ADC
     cbi(ADCSRA, ADEN);
 }
 
-// read ADC value (8 bit)
+/* read ADC value (8 bit) */
 uint8_t adc_read() {
     // Start the conversion
     sbi(ADCSRA, ADSC);

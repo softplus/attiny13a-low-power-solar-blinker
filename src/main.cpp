@@ -35,14 +35,17 @@
 #define ADC_PIN 4
 #define ADC_THRESHOLD 50 // -> ca 1.3v solar cell (pretty dark)
 
+// pin = (led numbers) color
 // 0 = (4,8,12) yellow, very darkest
 // 1 = (3,7,11) white, very dark
 // 2 = (2,6,10) red, very dark
 // 3 = (1,5,9)  green
 
+/* Set watchdog timer to 8 seconds */
 void set_watchdog() {
-	// prescale timer to 4s
-	sbi(WDTCR, WDP3); cbi(WDTCR, WDP2); cbi(WDTCR, WDP1); cbi(WDTCR, WDP0);
+	// Docs: https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny13A-Data-Sheet-DS40002307A.pdf#page=49
+	// prescale timer to 8s
+	sbi(WDTCR, WDP3); cbi(WDTCR, WDP2); cbi(WDTCR, WDP1); sbi(WDTCR, WDP0);
 	// Enable watchdog timer interrupts
 	sbi(WDTCR, WDTIE);
 	sei(); // Enable global interrupts
@@ -53,13 +56,14 @@ void set_watchdog() {
 
 
 uint8_t pin = 0;
-// blinks the next light as appropriate
+/* blinks the next light as appropriate */
 void blinken_light() {
 	pin++; if(pin>3) pin=0;
 	set_pin_output(pin);
 	pin_write_pwm(pin, 50, 250);
 }
 
+/* Enables and reads the ADC from the solar panel */
 uint8_t read_value() {
 	uint8_t adc_value;
 	adc_enable(ADC_PIN);
@@ -71,11 +75,13 @@ uint8_t read_value() {
 	return adc_value;
 }
 
-ISR(WDT_vect) {   } // empty -> continues in main loop
+/* Watchdog timer function is empty */
+ISR(WDT_vect) { } // empty -> continues in main loop
 
+/* main loop: blink, then go to sleep if appropriate */
 int main(void) {
-	// prepare power-down sleep mode, watchdog timer set to 4s
-	set_watchdog(); // 4s
+	// prepare power-down sleep mode, watchdog timer set
+	set_watchdog();
 	for (;;) { // our main loop
 		blinken_light();
 		if (pin==0) {
