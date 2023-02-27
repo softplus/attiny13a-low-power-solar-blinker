@@ -28,37 +28,31 @@
 
 /* Software-PWM on the pin for a given duration, returns when complete */
 void pin_write_pwm(uint8_t pin, uint8_t value, uint16_t duration_ms) {
-    // value = 0-255
-	// duration = ms
-    #define PULSE_LENGTH 10 // in ms (10ms = 100Hz)
-    #define PULSE_US (PULSE_LENGTH * 1000/256) // 10ms*1000/256=ca 39us to fit value in 10ms(100Hz)
-    #if F_CPU>1000000L
-    #define VALUE_DIV 1
-    #else
-    #define VALUE_DIV 16
-    #endif
+    // value = 0-255, duration = ms
+    #define CYCLE_LENGTH 10 // in ms (10ms = 100Hz)
+    #define PULSE_US 39 // (CYCLE_LENGTH * 1000/256) = 10ms*1000/256=ca 39us to fit value in 10ms(100Hz)
     // min pulse length at 128khz
 
-    for (uint16_t i=0; i<duration_ms/PULSE_LENGTH; i++) {
+    uint8_t on_time = PULSE_US * value;
+    uint16_t cycle_counts = duration_ms / CYCLE_LENGTH;
+    for (uint16_t i=0; i<cycle_counts; i++) {
         set_pin_high(pin);
-        uint8_t on_time = trunc(PULSE_US * value / VALUE_DIV) * VALUE_DIV;
-        delay_us(on_time) ;
+        delay_us(on_time);
         set_pin_low(pin);
-        //delay_us(trunc(PULSE_US * (255-value) / VALUE_DIV) * VALUE_DIV);
-        delay_us(PULSE_LENGTH * 1000 - on_time);
+        delay_us(CYCLE_LENGTH * 1000 - on_time);
     }
 }
 
 /* Delay for a given number of microseconds (us) */
 void delay_us(uint16_t us_count) {
 #if F_CPU>1000000L
-#define DELAY_US_ACCURACY 10
+#define DELAY_US_ACCURACY 16
 #else
-#define DELAY_US_ACCURACY 50
+#define DELAY_US_ACCURACY 64
 #endif
     for (uint16_t i=0; i<us_count/DELAY_US_ACCURACY; i++) 
         _delay_us(DELAY_US_ACCURACY); 
-    // 10us accuracy for 1Mhz+, 50us for <1MHz
+    // 16us accuracy for 1Mhz+, 64us for <1MHz; arbitrarily chosen
 }
 
 /* Delay for a given number of milliseconds (ms) */
