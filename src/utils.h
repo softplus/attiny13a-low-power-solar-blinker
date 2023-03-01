@@ -32,11 +32,14 @@
 #define set_pin_low(port)    (PORTB &= ~(1 << port))
 
 /* defines for setting and clearing register bits */
-#ifndef cbi
-#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+#ifndef BIT_CLEAR
+#define BIT_CLEAR(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
 #endif
-#ifndef sbi
-#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#ifndef BIT_SET
+#define BIT_SET(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#endif
+#ifndef BIT_CHECK
+#define BIT_CHECK(sfr, bit) (_SFR_BYTE(sfr) & _BV(bit) )
 #endif
 
 /* Software PWM */

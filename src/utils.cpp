@@ -66,14 +66,14 @@ void adc_enable(uint8_t pin) {
     // only possible for pins 2-5 (PB2-PB5)
     if (pin<2) return;
 
-    sbi(ADMUX, REFS0);  // 0: Vref = Vcc; 1: Vref = 1.1V
+    BIT_SET(ADMUX, REFS0);  // 0: Vref = Vcc; 1: Vref = 1.1V
 
     // Select the ADC input
-    cbi(ADMUX, MUX0); cbi(ADMUX, MUX1);     // reset to 00
-    if ((3==pin) || (4==pin)) sbi(ADMUX, MUX1); // set as needed
-    if ((2==pin) || (5==pin)) sbi(ADMUX, MUX0);
+    BIT_CLEAR(ADMUX, MUX0); BIT_CLEAR(ADMUX, MUX1);     // reset to 00
+    if ((3==pin) || (4==pin)) BIT_SET(ADMUX, MUX1); // set as needed
+    if ((2==pin) || (5==pin)) BIT_SET(ADMUX, MUX0);
 
-    sbi(ADMUX, ADLAR); // left-adjust result -> 8 bit results
+    BIT_SET(ADMUX, ADLAR); // left-adjust result -> 8 bit results
 
     /* Set the prescaler to something in range of 50kHz - 200kHz
     ** 
@@ -85,32 +85,32 @@ void adc_enable(uint8_t pin) {
     ** 9.6 MHz   64 (150 kHz), 128 (75 kHz)
     */
     #if F_CPU<360000L
-    cbi(ADCSRA, ADPS2); cbi(ADCSRA, ADPS1); sbi(ADCSRA, ADPS0); // div 2 until 360 kHz
+    BIT_CLEAR(ADCSRA, ADPS2); BIT_CLEAR(ADCSRA, ADPS1); BIT_SET(ADCSRA, ADPS0); // div 2 until 360 kHz
     #elif F_CPU<720000L
-    cbi(ADCSRA, ADPS2); sbi(ADCSRA, ADPS1); cbi(ADCSRA, ADPS0); // div 4 until 720 kHz
+    BIT_CLEAR(ADCSRA, ADPS2); BIT_SET(ADCSRA, ADPS1); BIT_CLEAR(ADCSRA, ADPS0); // div 4 until 720 kHz
     #elif F_CPU<1440000L
-    cbi(ADCSRA, ADPS2); sbi(ADCSRA, ADPS1); sbi(ADCSRA, ADPS0); // div 8 until 1.440 MHz
+    BIT_CLEAR(ADCSRA, ADPS2); BIT_SET(ADCSRA, ADPS1); BIT_SET(ADCSRA, ADPS0); // div 8 until 1.440 MHz
     #elif F_CPU<2880000L
-    sbi(ADCSRA, ADPS2); cbi(ADCSRA, ADPS1); cbi(ADCSRA, ADPS0); // div 16 until 2.880 MHz
+    BIT_SET(ADCSRA, ADPS2); BIT_CLEAR(ADCSRA, ADPS1); BIT_CLEAR(ADCSRA, ADPS0); // div 16 until 2.880 MHz
     #elif F_CPU<5760000L
-    sbi(ADCSRA, ADPS2); cbi(ADCSRA, ADPS1); sbi(ADCSRA, ADPS0); // div 32 until 5.760 MHz
+    BIT_SET(ADCSRA, ADPS2); BIT_CLEAR(ADCSRA, ADPS1); BIT_SET(ADCSRA, ADPS0); // div 32 until 5.760 MHz
     #else
-    sbi(ADCSRA, ADPS2); sbi(ADCSRA, ADPS1); cbi(ADCSRA, ADPS0); // div 64 for rest
+    BIT_SET(ADCSRA, ADPS2); BIT_SET(ADCSRA, ADPS1); BIT_CLEAR(ADCSRA, ADPS0); // div 64 for rest
     #endif
 
-    sbi(ADCSRA, ADEN);  // enable ADC
+    BIT_SET(ADCSRA, ADEN);  // enable ADC
 }
 
 /* disable ADC for all pins; saves power */
 void adc_disable() {
     // disable ADC
-    cbi(ADCSRA, ADEN);
+    BIT_CLEAR(ADCSRA, ADEN);
 }
 
 /* read ADC value (8 bit) */
 uint8_t adc_read() {
     // Start the conversion
-    sbi(ADCSRA, ADSC);
+    BIT_SET(ADCSRA, ADSC);
 
     // Wait for it to finish
     while (ADCSRA & (1 << ADSC)) { };

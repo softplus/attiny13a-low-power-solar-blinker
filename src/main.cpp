@@ -45,9 +45,9 @@
 void set_watchdog() {
 	// Docs: https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny13A-Data-Sheet-DS40002307A.pdf#page=49
 	// prescale timer to 8s
-	sbi(WDTCR, WDP3); cbi(WDTCR, WDP2); cbi(WDTCR, WDP1); sbi(WDTCR, WDP0);
+	BIT_SET(WDTCR, WDP3); BIT_CLEAR(WDTCR, WDP2); BIT_CLEAR(WDTCR, WDP1); BIT_SET(WDTCR, WDP0);
 	// Enable watchdog timer interrupts
-	sbi(WDTCR, WDTIE);
+	BIT_SET(WDTCR, WDTIE);
 	sei(); // Enable global interrupts
 	// Use the Power Down sleep mode
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
